@@ -16,8 +16,13 @@
 		<div id="content">
 			<div id="board">
 				<form class="board-form" method="post" action="board">
-					<input type = "hidden" name = "a" value="write">
-					<input type = "hidden" name = "userNo" value="${loginUser.no }">
+					<input  name = "a" value="write">
+					<input  value="${loginUser.no }"name = "userNo">
+					<input  value="${vo.no }" name="boardNo">
+					<input  value="${vo.gno }" name="gno">
+					<input  value="${vo.ono }" name="ono">
+					<input  value="${vo.depth }" name="depth">
+					
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글쓰기</th>

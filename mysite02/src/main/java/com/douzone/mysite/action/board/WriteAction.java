@@ -16,15 +16,37 @@ public class WriteAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		BoardVo vo = new BoardVo();
+
 		long userNo = Long.parseLong(request.getParameter("userNo"));
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
-		
-		BoardVo vo = new BoardVo();
+
 		vo.setUserNo(userNo);
 		vo.setTitle(title);
 		vo.setContents(content);
-		
+
+		if ("" != request.getParameter("boardNo") && "" != request.getParameter("gno")
+				&& "" != request.getParameter("ono") && "" != request.getParameter("depth")) {
+
+			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!"+ request.getParameter("boardNo"));
+			long boardNo = Long.parseLong(request.getParameter("boardNo"));
+			long gno = Long.parseLong(request.getParameter("gno"));
+			long ono = Long.parseLong(request.getParameter("ono"));
+			long depth = Long.parseLong(request.getParameter("depth"));
+
+			vo.setNo(boardNo);
+			vo.setGno(gno);
+			vo.setOno(ono);
+			vo.setDepth(depth);
+			
+			new BoardRepository().updateList(vo);
+			new BoardRepository().insertReply(vo);
+			WebUtil.redirect(request.getContextPath() + "/board?a=list", request, response);
+			
+			return;
+		}
+
 		new BoardRepository().write(vo);
 		WebUtil.redirect(request.getContextPath() + "/board?a=list", request, response);
 	}

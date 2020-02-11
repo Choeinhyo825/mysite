@@ -42,12 +42,13 @@
 							<a href="${pageContext.request.contextPath }/board?a=modifyForm&no=${vo.no}">글수정</a>
 						</c:when>
 						<c:when test="${!empty loginUser && loginUser.no ne vo.userNo}">
-							<form action="">
-							<input value="${vo.no }boardNo" name="boardNo">
-							<input value="${vo.gno }gno" name="gno">
-							<input value="${vo.ono }ono" name="ono">
-							<input value="${vo.depth }depth" name="depth">
-								<a href="${pageContext.request.contextPath }/board?a=writeForm&no=${vo.no}">답글달기</a>
+							<form action="board" method="post" >
+								<input type="hidden" value="writeForm" name=a>
+								<input type="hidden" value="${vo.no }" name="boardNo">
+								<input type="hidden" value="${vo.gno }" name="gno">
+								<input type="hidden" value="${vo.ono }" name="ono">
+								<input type="hidden" value="${vo.depth }" name="depth">
+								<input type="submit" value="답글달기">
 							</form>
 						</c:when>
 					</c:choose>
