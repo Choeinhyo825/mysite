@@ -21,7 +21,7 @@ public class BoardRepository {
 
 		try {
 			conn = getConnection();
-			String sql = "select b.no, b.user_no, b.title, b.contents, b.hit, b.reg_date, b.gno, b.ono, b.depth, u.name from board b join user u on(b.user_no = u.no) order by 1 desc";
+			String sql = "select b.no, b.user_no, b.title, b.contents, b.hit, b.reg_date, b.gno, b.ono, b.depth, u.name from board b join user u on(b.user_no = u.no) order by b.gno desc, b.ono asc";
 			pstmt = conn.prepareStatement(sql);
 			rset = pstmt.executeQuery();
 
@@ -69,7 +69,7 @@ public class BoardRepository {
 		}
 		return list;
 	}
-	
+
 	public BoardVo selectContent(long num) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -81,7 +81,7 @@ public class BoardRepository {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, num);
 			rset = pstmt.executeQuery();
-			
+
 			while (rset.next()) {
 				long no = rset.getLong(1);
 				String title = rset.getString(2);
@@ -90,7 +90,7 @@ public class BoardRepository {
 				long gno = rset.getLong(5);
 				long ono = rset.getLong(6);
 				long depth = rset.getLong(7);
-				
+
 				vo.setNo(no);
 				vo.setTitle(title);
 				vo.setContents(contents);
@@ -116,7 +116,7 @@ public class BoardRepository {
 		}
 		return vo;
 	}
-	
+
 	public Boolean hit(long no) {
 		Boolean result = false;
 		Connection conn = null;
@@ -158,12 +158,45 @@ public class BoardRepository {
 		try {
 			conn = getConnection();
 
-			String sql = "insert into board values(null, ?, ?, ?, 0, now(), (select max(no)+1 from board b),1,1)";
-			pstmt = conn.prepareStatement(sql);
+				String sql = "insert into board values(null, ?, ?, ?, 0, now(), (select max(no)+1 from board b),1,0)";
+				pstmt = conn.prepareStatement(sql);
 
-			pstmt.setLong(1, vo.getUserNo());
-			pstmt.setString(2, vo.getTitle());
-			pstmt.setString(3, vo.getContents());
+				pstmt.setLong(1, vo.getUserNo());
+				pstmt.setString(2, vo.getTitle());
+				pstmt.setString(3, vo.getContents());
+
+				int count = pstmt.executeUpdate();
+				result = count == 1;
+				
+		} catch (SQLException e) {
+			System.err.println("에러 발생 : " + e);
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+
+	}
+
+	public Boolean updateList(BoardVo vo) {
+		
+		Boolean result = false;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = getConnection();
+
+			String sql = "update board set order_no  = order_no +1 where group_no = ? and order_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setLong(1, vo.getGno());
+			pstmt.setLong(2, vo.getOno());
 
 			int count = pstmt.executeUpdate();
 
@@ -182,9 +215,45 @@ public class BoardRepository {
 			}
 		}
 		return result;
-
 	}
-	
+
+	public Boolean insertReply(BoardVo vo) {
+		Boolean result = false;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = getConnection();
+
+				String sql = "insert into board values(null, ?, ?, ?, 0, now(), ?,?,?)";
+				pstmt = conn.prepareStatement(sql);
+
+				pstmt.setLong(1, vo.getUserNo());
+				pstmt.setString(2, vo.getTitle());
+				pstmt.setString(3, vo.getContents());
+				pstmt.setLong(4, vo.getGno());
+				pstmt.setLong(5, vo.getOno()+1);
+				pstmt.setLong(6, vo.getDepth()+1);
+				
+
+				int count = pstmt.executeUpdate();
+				result = count == 1;
+				
+		} catch (SQLException e) {
+			System.err.println("에러 발생 : " + e);
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
 	public Boolean modify(BoardVo vo) {
 		Boolean result = false;
 		Connection conn = null;
@@ -218,7 +287,7 @@ public class BoardRepository {
 		}
 		return result;
 	}
-	
+
 	public Boolean delete(long no) {
 		Boolean result = false;
 		Connection conn = null;
@@ -230,7 +299,7 @@ public class BoardRepository {
 			String sql = "delete from board where no = ?";
 			pstmt = conn.prepareStatement(sql);
 
-			pstmt.setLong(1 ,no);
+			pstmt.setLong(1, no);
 
 			int count = pstmt.executeUpdate();
 
@@ -263,9 +332,5 @@ public class BoardRepository {
 		}
 		return conn;
 	}
-
-
-
-
 
 }

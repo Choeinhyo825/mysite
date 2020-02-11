@@ -31,21 +31,13 @@
 					<c:forEach items="${list }" var="vo" varStatus="status">
 						<tr>
 							<td>${listCount-status.index}</td>
-							<td style="text-align: left; padding-left: ${0*0}px"><a href="${pageContext.servletContext.contextPath }/board?a=view&no=${vo.no}">${vo.title }</a></td>
+							<td style="text-align: left; padding-left: ${30*vo.depth}px"><c:if test="${vo.depth >0 }"><img src="${pageContext.servletContext.contextPath }/assets/images/reply.png"></c:if><a href="${pageContext.servletContext.contextPath }/board?a=view&no=${vo.no}">${vo.title }</a></td>
 							<td>${vo.name}</td>
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
 							<td><c:if test="${loginUser.no eq vo.userNo }"><a href="${pageContext.servletContext.contextPath }/board?a=deleteForm&no=${vo.no}" class="del"><img alt="" src="${pageContext.servletContext.contextPath }/assets/images/recycle.png"></a></c:if></td>
 						</tr>
 					</c:forEach>
-					<%-- <tr>
-						<td>2</td>
-						<td style="text-align: left; padding-left: ${20*1}px"><img alt="" src="${pageContext.servletContext.contextPath }/assets/images/reply.png"><a href="${pageContext.servletContext.contextPath }/board?a=view">두 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-10-02 12:04:12</td>
-						<td><a href="" class="del"><img alt="" src="${pageContext.servletContext.contextPath }/assets/images/recycle.png"></a></td>
-					</tr> --%>
 				</table>
 				
 				<!-- pager 추가 -->
