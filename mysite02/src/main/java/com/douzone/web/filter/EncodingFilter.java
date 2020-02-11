@@ -17,7 +17,7 @@ public class EncodingFilter implements Filter {
 		if (encoding == null) {
 			encoding = "utf-8";
 		}
-		System.out.println("Encoding Filter Initialized...");
+//		System.out.println("Encoding Filter Initialized...");
 
 	}
 
@@ -26,7 +26,7 @@ public class EncodingFilter implements Filter {
 
 		// request 처리
 		request.setCharacterEncoding(encoding);
-		System.out.println("filter접근");
+//		System.out.println("filter접근");
 
 		chain.doFilter(request, response);
 

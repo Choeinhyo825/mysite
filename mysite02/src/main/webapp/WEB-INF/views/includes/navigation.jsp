@@ -11,7 +11,7 @@
 			<ul>
 				<li><a href="${pageContext.request.contextPath }">최인효</a></li>
 				<li><a href="${pageContext.request.contextPath }/gb?a=list">방명록</a></li>
-				<li><a href="${pageContext.request.contextPath }/board">게시판</a></li>
+				<li><a href="${pageContext.request.contextPath }/board?a=list">게시판</a></li>
 			</ul>
 		</div>
 	</div>

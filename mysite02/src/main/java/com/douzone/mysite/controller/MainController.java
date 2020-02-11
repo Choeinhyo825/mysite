@@ -19,19 +19,19 @@ public class MainController extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		String configPath = getServletConfig().getInitParameter("config");
-		System.out.println("init() called : " + configPath);
+//		System.out.println("init() called : " + configPath);
 		super.init();
 	}
 
 	@Override
 	protected void service(HttpServletRequest arg0, HttpServletResponse arg1) throws ServletException, IOException {
-		System.out.println("service() called");
+//		System.out.println("service() called");
 		super.service(arg0, arg1);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("doGet() called");
+//		System.out.println("doGet() called");
 
 		String actionName = request.getParameter("a");
 		Action action = new MainActionFactory().getAction(actionName);
@@ -41,13 +41,13 @@ public class MainController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("doPost() called");
+//		System.out.println("doPost() called");
 		doGet(request, response);
 	}
 
 	@Override
 	public void destroy() {
-		System.out.println("destroy() called");
+//		System.out.println("destroy() called");
 		super.destroy();
 	}
 
