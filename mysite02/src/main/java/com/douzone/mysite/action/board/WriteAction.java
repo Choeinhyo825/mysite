@@ -29,7 +29,6 @@ public class WriteAction implements Action {
 		if ("" != request.getParameter("boardNo") && "" != request.getParameter("gno")
 				&& "" != request.getParameter("ono") && "" != request.getParameter("depth")) {
 
-			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!"+ request.getParameter("boardNo"));
 			long boardNo = Long.parseLong(request.getParameter("boardNo"));
 			long gno = Long.parseLong(request.getParameter("gno"));
 			long ono = Long.parseLong(request.getParameter("ono"));
