@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+	<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
@@ -16,12 +16,12 @@
 		<div id="content">
 			<div id="board">
 				<form class="board-form" method="post" action="board">
-					<input  name = "a" value="write">
-					<input  value="${loginUser.no }"name = "userNo">
-					<input  value="${vo.no }" name="boardNo">
-					<input  value="${vo.gno }" name="gno">
-					<input  value="${vo.ono }" name="ono">
-					<input  value="${vo.depth }" name="depth">
+					<input type="hidden" name = "a" value="write">
+					<input type="hidden" value="${loginUser.no }"name = "userNo">
+					<input type="hidden" value="${vo.no }" name="boardNo">
+					<input type="hidden" value="${vo.gno }" name="gno">
+					<input type="hidden" value="${vo.ono }" name="ono">
+					<input type="hidden" value="${vo.depth }" name="depth">
 					
 					<table class="tbl-ex">
 						<tr>

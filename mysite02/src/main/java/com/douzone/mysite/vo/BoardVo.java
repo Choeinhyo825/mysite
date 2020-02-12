@@ -1,8 +1,7 @@
 package com.douzone.mysite.vo;
 
 public class BoardVo {
-	
-	
+
 	private long no;
 	private long userNo;
 	private String title;
@@ -12,8 +11,17 @@ public class BoardVo {
 	private long gno;
 	private long ono;
 	private long depth;
-	
+
+	private long rnum;
 	private String name;
+
+	public long getRnum() {
+		return rnum;
+	}
+
+	public void setRnum(long rnum) {
+		this.rnum = rnum;
+	}
 
 	public long getNo() {
 		return no;
@@ -98,10 +106,8 @@ public class BoardVo {
 	@Override
 	public String toString() {
 		return "BoardVo [no=" + no + ", userNo=" + userNo + ", title=" + title + ", contents=" + contents + ", hit="
-				+ hit + ", regDate=" + regDate + ", gno=" + gno + ", ono=" + ono + ", depth=" + depth + ", name=" + name
-				+ "]";
+				+ hit + ", regDate=" + regDate + ", gno=" + gno + ", ono=" + ono + ", depth=" + depth + ", rnum=" + rnum
+				+ ", name=" + name + "]";
 	}
-	
-	
-	
+
 }

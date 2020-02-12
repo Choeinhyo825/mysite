@@ -27,29 +27,44 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>				
-					<c:set var="listCount" value="${fn:length(list) }" /> 
 					<c:forEach items="${list }" var="vo" varStatus="status">
 						<tr>
-							<td>${listCount-status.index}</td>
+							<td>${pi.listCount-vo.rnum+1 }</td>
 							<td style="text-align: left; padding-left: ${30*vo.depth}px"><c:if test="${vo.depth >0 }"><img src="${pageContext.servletContext.contextPath }/assets/images/reply.png"></c:if><a href="${pageContext.servletContext.contextPath }/board?a=view&no=${vo.no}">${vo.title }</a></td>
 							<td>${vo.name}</td>
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
-							<td><c:if test="${loginUser.no eq vo.userNo }"><a href="${pageContext.servletContext.contextPath }/board?a=deleteForm&no=${vo.no}" class="del"><img alt="" src="${pageContext.servletContext.contextPath }/assets/images/recycle.png"></a></c:if></td>
+							<td>
+								<c:if test="${loginUser.no eq vo.userNo }">
+									<a href="${pageContext.servletContext.contextPath }/board?a=deleteForm&no=${vo.no}" class="del">
+										<img alt="" src="${pageContext.servletContext.contextPath }/assets/images/recycle.png">
+									</a>
+								</c:if>
+							</td>
 						</tr>
 					</c:forEach>
 				</table>
 				
 				<!-- pager 추가 -->
 				<div class="pager">
+				<%-- <c:if test="${pi.maxPage-5 >= pi.currentPage }">
+				</c:if> --%>
+						<%-- <c:set var="a" value ="${pi.currentPage/5 }"></c:set> --%>
 					<ul>
-						<li><a href="">◀</a></li>
-						<li><a href="">1</a></li>
-						<li class="selected">2</li>
-						<li><a href="">3</a></li>
-						<li>4</li>
-						<li>5</li>
-						<li><a href="">▶</a></li>
+						<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=1">◀</a></li>
+						
+						<c:forEach varStatus="vs" begin="1" end="${pi.maxPage }" step="1">
+						
+							<c:choose>
+								<c:when test="${vs.count eq pi.currentPage}">
+									<li class="selected">${vs.count }</li>
+								</c:when>
+								<c:otherwise>	
+									<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${vs.count }">${vs.count }</a></li>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+						<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${pi.maxPage}">▶</a></li>
 					</ul>
 				</div>					
 				<!-- pager 추가 -->
