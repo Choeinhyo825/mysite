@@ -20,13 +20,13 @@ public class ModifyFormAction implements Action {
 		
 		HttpSession session = request.getSession();
 		if(session == null) {
-			WebUtil.redirect(request.getContextPath(), request, response);
+				WebUtil.redirect(request.getContextPath(), request, response);
 			return;
 		}
 		
 		UserVo loginUser = (UserVo)session.getAttribute("loginUser");
 		if(loginUser == null) {
-			WebUtil.redirect(request.getContextPath(), request, response);
+				WebUtil.redirect(request.getContextPath(), request, response);
 			return;
 		}
 		

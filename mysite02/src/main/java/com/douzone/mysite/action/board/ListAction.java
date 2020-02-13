@@ -25,27 +25,49 @@ public class ListAction implements Action {
 		long maxPage;
 		long startPage;
 		long endPage;
+		long blockStartNum;
+		long blockLastNum;
+		long listCount;
+		String kwd;
 
 		currentPage = 1;
+		blockStartNum = 1;
+		blockLastNum = 5;
+
 		if (request.getParameter("currentPage") != null) {
 			currentPage = Long.parseLong((request.getParameter("currentPage")));
 		}
 
+		if (request.getParameter("bsn") != null && request.getParameter("bln") != null) {
+			blockStartNum = Long.parseLong((request.getParameter("bsn")));
+			blockLastNum = Long.parseLong((request.getParameter("bln")));
+		}
+
+		if (currentPage > blockLastNum) {
+			blockStartNum = blockStartNum + 5;
+			blockLastNum = blockLastNum + 5;
+		} else if (currentPage < blockStartNum && currentPage < blockLastNum) {
+			blockStartNum = blockStartNum - 5;
+			blockLastNum = blockLastNum - 5;
+		}
+
+		kwd = request.getParameter("kwd");
+
+		listCount = new BoardRepository().searchBoardListCount(kwd);
+
 		limit = 5;
-		long listCount = new BoardRepository().searchBoardListCount();
 		maxPage = (long) ((double) listCount / limit + 0.9);
 		startPage = (currentPage - 1) * limit + 1;
 		endPage = startPage + limit - 1;
-		
-		
 
-		PageInfo pi = new PageInfo(currentPage, limit, maxPage, startPage, endPage, listCount);
-		System.out.println(pi);
+		PageInfo pi = new PageInfo(currentPage, limit, maxPage, startPage, endPage, listCount, blockStartNum,
+				blockLastNum);
 
-		List<BoardVo> list = new BoardRepository().searchBoardRecord(pi);
-		
+		List<BoardVo> list = new BoardRepository().searchBoardRecord(pi,kwd);
+
 		request.setAttribute("list", list);
 		request.setAttribute("pi", pi);
+		request.setAttribute("kwd", kwd);
 		WebUtil.forward("/WEB-INF/views/board/list.jsp", request, response);
 	}
 

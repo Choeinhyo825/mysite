@@ -11,9 +11,18 @@ public class BoardVo {
 	private long gno;
 	private long ono;
 	private long depth;
+	private String status;
 
 	private long rnum;
 	private String name;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	public long getRnum() {
 		return rnum;
@@ -106,8 +115,8 @@ public class BoardVo {
 	@Override
 	public String toString() {
 		return "BoardVo [no=" + no + ", userNo=" + userNo + ", title=" + title + ", contents=" + contents + ", hit="
-				+ hit + ", regDate=" + regDate + ", gno=" + gno + ", ono=" + ono + ", depth=" + depth + ", rnum=" + rnum
-				+ ", name=" + name + "]";
+				+ hit + ", regDate=" + regDate + ", gno=" + gno + ", ono=" + ono + ", depth=" + depth + ", status="
+				+ status + ", rnum=" + rnum + ", name=" + name + "]";
 	}
 
 }
