@@ -13,17 +13,27 @@ import com.douzone.mysite.vo.PageInfo;
 
 public class BoardRepository {
 	
-	public long searchBoardListCount() {
+	// 총 게시글 count
+	public long searchBoardListCount(String kwd) {
+		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
+		String sql;
 		long listCount = 0;
 		
 		try {
 			conn = getConnection();
-			String sql = "SELECT COUNT(*) FROM board";
-			pstmt = conn.prepareStatement(sql);
+			
+			if(kwd == null) {
+				sql = "SELECT COUNT(*) FROM board";
+				pstmt = conn.prepareStatement(sql);
+			}else {
+				sql = "SELECT COUNT(*) FROM board WHERE TITLE LIKE ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, "%"+kwd+"%");
+			}
 			rset = pstmt.executeQuery();
 
 			while(rset.next()) {
@@ -47,20 +57,32 @@ public class BoardRepository {
 		
 	}
 	
-	public List<BoardVo> searchBoardRecord(PageInfo pi) {
+	// 페이징
+	public List<BoardVo> searchBoardRecord(PageInfo pi,String kwd) {
 		
 		List<BoardVo> list = new ArrayList<BoardVo>();
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
+		
+		String sql;
 
 		try {
 			conn = getConnection();
-			String sql = "SELECT tb.RNUM , tb.no, tb.user_no, tb.title, tb.hit, tb.reg_date, tb.gno, tb.ono, tb.depth, tb.name FROM (SELECT @ROWNUM:=@ROWNUM+1 as RNUM, bb.no, bb.user_no, bb.title, bb.hit, bb.reg_date, bb.gno, bb.ono, bb.depth, bb.name FROM (select b.no, b.user_no, b.title, b.hit, b.reg_date, b.gno, b.ono, b.depth, u.name from board b join user u on(b.user_no = u.no) order by b.gno desc, b.ono asc) bb, (SELECT @ROWNUM:=0) TMP ) tb WHERE RNUM BETWEEN ? AND ? order by tb.gno desc, tb.ono";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setLong(1, pi.getStartPage());
-			pstmt.setLong(2, pi.getEndpage());
+			
+			if(kwd == null) {
+				sql = "SELECT tb.RNUM , tb.no, tb.user_no, tb.title, tb.hit, tb.reg_date, tb.group_no, tb.order_no, tb.depth, tb.name, tb.status FROM (SELECT @ROWNUM:=@ROWNUM+1 as RNUM, bb.no, bb.user_no, bb.title, bb.hit, bb.reg_date, bb.group_no, bb.order_no, bb.depth, bb.name, bb.status FROM (select b.no, b.user_no, b.title, b.hit, b.reg_date, b.group_no, b.order_no, b.depth, u.name, b.status from board b join user u on(b.user_no = u.no) order by b.group_no desc, b.order_no asc) bb, (SELECT @ROWNUM:=0) TMP ) tb WHERE RNUM BETWEEN ? AND ? order by tb.group_no desc, tb.order_no";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setLong(1, pi.getStartPage());
+				pstmt.setLong(2, pi.getEndpage());
+			}else {
+				sql = "SELECT tb.RNUM , tb.no, tb.user_no, tb.title, tb.hit, tb.reg_date, tb.group_no, tb.order_no, tb.depth, tb.name, tb.status FROM (SELECT @ROWNUM:=@ROWNUM+1 as RNUM, bb.no, bb.user_no, bb.title, bb.hit, bb.reg_date, bb.group_no, bb.order_no, bb.depth, bb.name , bb.status FROM (select b.no, b.user_no, b.title, b.hit, b.reg_date, b.group_no, b.order_no, b.depth, u.name, b.status from board b join user u on(b.user_no = u.no) where b.title like ? order by b.group_no desc, b.order_no asc) bb, (SELECT @ROWNUM:=0) TMP ) tb WHERE RNUM BETWEEN ? AND ? order by tb.group_no desc, tb.order_no;";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, "%"+kwd+"%");
+				pstmt.setLong(2, pi.getStartPage());
+				pstmt.setLong(3, pi.getEndpage());
+			}
 			rset = pstmt.executeQuery();
 
 			while (rset.next()) {
@@ -74,6 +96,7 @@ public class BoardRepository {
 				long ono = rset.getLong(8);
 				long depth = rset.getLong(9);
 				String name = rset.getString(10);
+				String status = rset.getString(11);
 
 				BoardVo vo = new BoardVo();
 				vo.setRnum(rnum);
@@ -86,6 +109,7 @@ public class BoardRepository {
 				vo.setOno(ono);
 				vo.setDepth(depth);
 				vo.setName(name);
+				vo.setStatus(status);
 
 				list.add(vo);
 
@@ -109,39 +133,7 @@ public class BoardRepository {
 		
 	}
 
-//	public long findAllCount() {		
-//		Connection conn = null;
-//		PreparedStatement pstmt = null;
-//		ResultSet rset = null;
-//		
-//		long listCount = 0;
-//		
-//		try {
-//			conn = getConnection();
-//			String sql = "SELECT COUNT(*) FROM board";
-//			pstmt = conn.prepareStatement(sql);
-//			rset = pstmt.executeQuery();
-//
-//			while(rset.next()) {
-//				listCount = rset.getLong(1);
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		} finally {
-//			try {
-//				if (rset != null)
-//					rset.close();
-//				if (pstmt != null)
-//					pstmt.close();
-//				if (conn != null)
-//					conn.close();
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		return listCount;
-//	}
-
+	// 글 상세보기
 	public BoardVo selectContent(long num) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -149,7 +141,7 @@ public class BoardRepository {
 		BoardVo vo = new BoardVo();
 		try {
 			conn = getConnection();
-			String sql = "select no, title, contents, user_no, gno, ono, depth from board where no = ?";
+			String sql = "select no, title, contents, user_no, group_no, order_no, depth, status from board where no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, num);
 			rset = pstmt.executeQuery();
@@ -162,6 +154,7 @@ public class BoardRepository {
 				long gno = rset.getLong(5);
 				long ono = rset.getLong(6);
 				long depth = rset.getLong(7);
+				String status = rset.getString(8);
 
 				vo.setNo(no);
 				vo.setTitle(title);
@@ -170,6 +163,8 @@ public class BoardRepository {
 				vo.setGno(gno);
 				vo.setOno(ono);
 				vo.setDepth(depth);
+				vo.setStatus(status);
+				
 			}
 
 		} catch (SQLException e) {
@@ -188,7 +183,8 @@ public class BoardRepository {
 		}
 		return vo;
 	}
-
+	
+	// 조회수 증가
 	public Boolean hit(long no) {
 		Boolean result = false;
 		Connection conn = null;
@@ -197,7 +193,7 @@ public class BoardRepository {
 		try {
 			conn = getConnection();
 
-			String sql = "update board set hit = (select * from (select b.hit+1 from board b where b.no=?)as a) where no = ?";
+			String sql = "update board set hit = (select * from (select b.hit+1 from board b where b.no=?)as a) where no = ? and status like 'y'";
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setLong(1, no);
@@ -221,7 +217,8 @@ public class BoardRepository {
 		}
 		return result;
 	}
-
+	
+	// 글작성
 	public Boolean write(BoardVo vo) {
 		Boolean result = false;
 		Connection conn = null;
@@ -230,7 +227,7 @@ public class BoardRepository {
 		try {
 			conn = getConnection();
 
-				String sql = "insert into board values(null, ?, ?, ?, 0, now(), ifnull((select max(gno)+1 from board b),1),1,0)";
+				String sql = "insert into board values(null, ?, ?, ?, 0, now(), ifnull((select max(group_no)+1 from board b),1),1,0,'y')";
 				pstmt = conn.prepareStatement(sql);
 
 				pstmt.setLong(1, vo.getUserNo());
@@ -255,7 +252,8 @@ public class BoardRepository {
 		return result;
 
 	}
-
+	
+	// 답글 작성시 게시글 업데이트
 	public Boolean updateList(BoardVo vo) {
 		
 		Boolean result = false;
@@ -265,7 +263,7 @@ public class BoardRepository {
 		try {
 			conn = getConnection();
 
-			String sql = "update board set ono = ono +1 where gno = ? and ono > ?";
+			String sql = "update board set order_no = order_no +1 where group_no = ? and order_no > ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, vo.getGno());
 			pstmt.setLong(2, vo.getOno());
@@ -289,6 +287,7 @@ public class BoardRepository {
 		return result;
 	}
 
+	// 답글 작성
 	public Boolean insertReply(BoardVo vo) {
 		Boolean result = false;
 		Connection conn = null;
@@ -297,7 +296,7 @@ public class BoardRepository {
 		try {
 			conn = getConnection();
 
-				String sql = "insert into board values(null, ?, ?, ?, 0, now(), ?,?,?)";
+				String sql = "insert into board values(null, ?, ?, ?, 0, now(), ?,?,?, 'y')";
 				pstmt = conn.prepareStatement(sql);
 
 				pstmt.setLong(1, vo.getUserNo());
@@ -326,6 +325,7 @@ public class BoardRepository {
 		return result;
 	}
 
+	// 글 수정
 	public Boolean modify(BoardVo vo) {
 		Boolean result = false;
 		Connection conn = null;
@@ -360,6 +360,7 @@ public class BoardRepository {
 		return result;
 	}
 
+	// 글삭제
 	public Boolean delete(long no) {
 		Boolean result = false;
 		Connection conn = null;
@@ -368,7 +369,7 @@ public class BoardRepository {
 		try {
 			conn = getConnection();
 
-			String sql = "delete from board where no = ?";
+			String sql = "update board set status = 'n', title = '' where no = ?";
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setLong(1, no);

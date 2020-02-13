@@ -24,13 +24,27 @@
 					</tr>
 					<tr>
 						<td class="label">제목</td>
-						<td>${vo.title }</td>
+							<c:choose>
+								<c:when test='${vo.status eq "y"}'>
+									<td>${vo.title }</td>
+								</c:when>
+								<c:otherwise>
+									<td>삭제된 게시글입니다.</td>
+								</c:otherwise>
+							</c:choose>
 					</tr>
 					<tr>	
 						<td class="label">내용</td>
 						<td>
 							<div class="view-content">
-								<p>${fn:replace(vo.contents, newLine, "<br>")}<p>
+								<c:choose>
+									<c:when test='${vo.status eq "y"}'>
+										<p>${fn:replace(vo.contents, newLine, "<br>")}<p>
+									</c:when>
+									<c:otherwise>
+										<p>삭제된 게시글입니다.</p>
+									</c:otherwise>
+								</c:choose>
 							</div>
 						</td>
 					</tr>
@@ -39,7 +53,9 @@
 					<a href="${pageContext.request.contextPath }/board?a=list">글목록</a>
 					<c:choose>
 						<c:when test="${!empty loginUser && loginUser.no eq vo.userNo }">
-							<a href="${pageContext.request.contextPath }/board?a=modifyForm&no=${vo.no}">글수정</a>
+							<c:if test='${status eq "y" }'>
+								<a href="${pageContext.request.contextPath }/board?a=modifyForm&no=${vo.no}">글수정</a>
+							</c:if>
 						</c:when>
 						<c:when test="${!empty loginUser && loginUser.no ne vo.userNo}">
 							<form action="board" method="post" >

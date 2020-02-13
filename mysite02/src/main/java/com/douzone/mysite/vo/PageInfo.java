@@ -1,17 +1,21 @@
 package com.douzone.mysite.vo;
 
 public class PageInfo {
+
 	private long currentPage;
 	private long limit;
 	private long maxPage;
 	private long startPage;
 	private long endpage;
 	private long listCount;
+	private long blockStartNum;
+	private long blockLastNum;
 
 	public PageInfo() {
 	}
 
-	public PageInfo(long currentPage, long limit, long maxPage, long startPage, long endpage, long listCount) {
+	public PageInfo(long currentPage, long limit, long maxPage, long startPage, long endpage, long listCount,
+			long blockStartNum, long blockLastNum) {
 		super();
 		this.currentPage = currentPage;
 		this.limit = limit;
@@ -19,7 +23,25 @@ public class PageInfo {
 		this.startPage = startPage;
 		this.endpage = endpage;
 		this.listCount = listCount;
+		this.blockStartNum = blockStartNum;
+		this.blockLastNum = blockLastNum;
 
+	}
+
+	public long getBlockStartNum() {
+		return blockStartNum;
+	}
+
+	public void setBlockStartNum(long blockStartNum) {
+		this.blockStartNum = blockStartNum;
+	}
+
+	public long getBlockLastNum() {
+		return blockLastNum;
+	}
+
+	public void setBlockLastNum(long blockLastNum) {
+		this.blockLastNum = blockLastNum;
 	}
 
 	public long getListCount() {
@@ -73,7 +95,12 @@ public class PageInfo {
 	@Override
 	public String toString() {
 		return "PageInfo [currentPage=" + currentPage + ", limit=" + limit + ", maxPage=" + maxPage + ", startPage="
-				+ startPage + ", endpage=" + endpage + ", listCount=" + listCount + "]";
+				+ startPage + ", endpage=" + endpage + ", listCount=" + listCount + ", blockStartNum=" + blockStartNum
+				+ ", blockLastNum=" + blockLastNum + "]";
 	}
+
+	
+	
+	
 
 }
