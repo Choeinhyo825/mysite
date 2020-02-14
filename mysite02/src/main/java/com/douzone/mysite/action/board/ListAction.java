@@ -46,7 +46,7 @@ public class ListAction implements Action {
 		if (currentPage > blockLastNum) {
 			blockStartNum = blockStartNum + 5;
 			blockLastNum = blockLastNum + 5;
-		} else if (currentPage < blockStartNum && currentPage < blockLastNum) {
+		} else if (currentPage < blockStartNum) {
 			blockStartNum = blockStartNum - 5;
 			blockLastNum = blockLastNum - 5;
 		}

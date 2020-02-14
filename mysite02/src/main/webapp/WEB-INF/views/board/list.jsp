@@ -15,7 +15,7 @@
 		<div id="content">
 			<div id="board">
 				<form id="search_form" action="board?a=list" method="post">
-					<input type="text" id="kwd" name="kwd" placeholder="제목으로 검색하세요" required="required">
+					<input type="text" id="kwd" name="kwd" placeholder="제목으로 검색하세요" required>
 					<input type="submit" value="찾기">
 				</form>
 				
@@ -70,7 +70,14 @@
 								<li>◀</li>
 							</c:when>
 							<c:otherwise>
-								<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${pi.currentPage -1}&bsn=${blockStartNum }&bln=${blockLastNum}&kwd=${kwd}">◀</a></li>
+								<c:choose>
+									<c:when test="${!empty kwd}">
+										<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${pi.currentPage -1}&bsn=${blockStartNum }&bln=${blockLastNum}&kwd=${kwd}">◀</a></li>
+									</c:when>
+									<c:otherwise>
+										<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${pi.currentPage -1}&bsn=${blockStartNum }&bln=${blockLastNum}">◀</a></li>
+									</c:otherwise>
+								</c:choose>
 							</c:otherwise>
 						</c:choose>
 						
@@ -89,7 +96,14 @@
 								<c:otherwise>	
 									<c:choose>
 										<c:when test="${pi.maxPage >= vs.index}">
-											<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${vs.index }&bsn=${blockStartNum }&bln=${blockLastNum}&kwd=${kwd}">${vs.index }</a></li>
+											<c:choose>
+												<c:when test="${!empty kwd}">
+													<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${vs.index }&bsn=${blockStartNum }&bln=${blockLastNum}&kwd=${kwd}">${vs.index }</a></li>
+												</c:when>
+												<c:otherwise>
+													<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${vs.index }&bsn=${blockStartNum }&bln=${blockLastNum}">${vs.index }</a></li>
+												</c:otherwise>
+											</c:choose>
 										</c:when>
 										<c:otherwise>	
 											<li>${vs.index }</li>
@@ -103,7 +117,14 @@
 								<li>▶</li>
 							</c:when>
 							<c:otherwise>
-								<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${pi.currentPage +1}&bsn=${blockStartNum }&bln=${blockLastNum}&kwd=${kwd}">▶</a></li>
+								<c:choose>
+									<c:when test="${!empty kwd}">
+										<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${pi.currentPage +1}&bsn=${blockStartNum }&bln=${blockLastNum}&kwd=${kwd}">▶</a></li>
+									</c:when>
+									<c:otherwise>
+										<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${pi.currentPage +1}&bsn=${blockStartNum }&bln=${blockLastNum}">▶</a></li>
+									</c:otherwise>
+								</c:choose>
 							</c:otherwise>
 						</c:choose>
 					</ul>
