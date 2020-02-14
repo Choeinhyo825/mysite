@@ -104,13 +104,13 @@ public class BoardRepository {
 				vo.setUserNo(userNo);
 				vo.setTitle(title);
 				vo.setHit(hit);
-				vo.setRegDate(regDate);
+				vo.setRegDate(regDate.substring(0,16));
 				vo.setGno(gno);
 				vo.setOno(ono);
 				vo.setDepth(depth);
 				vo.setName(name);
 				vo.setStatus(status);
-
+				
 				list.add(vo);
 
 			}
