@@ -53,7 +53,7 @@
 					<a href="${pageContext.request.contextPath }/board?a=list">글목록</a>
 					<c:choose>
 						<c:when test="${!empty loginUser && loginUser.no eq vo.userNo }">
-							<c:if test='${status eq "y" }'>
+							<c:if test='${vo.status eq "y" }'>
 								<a href="${pageContext.request.contextPath }/board?a=modifyForm&no=${vo.no}">글수정</a>
 							</c:if>
 						</c:when>
