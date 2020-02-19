@@ -72,12 +72,12 @@ public class BoardRepository {
 			conn = getConnection();
 			
 			if(kwd == null) {
-				sql = "SELECT tb.RNUM , tb.no, tb.user_no, tb.title, tb.hit, tb.reg_date, tb.group_no, tb.order_no, tb.depth, tb.name, tb.status FROM (SELECT @ROWNUM:=@ROWNUM+1 as RNUM, bb.no, bb.user_no, bb.title, bb.hit, bb.reg_date, bb.group_no, bb.order_no, bb.depth, bb.name, bb.status FROM (select b.no, b.user_no, b.title, b.hit, b.reg_date, b.group_no, b.order_no, b.depth, u.name, b.status from board b join user u on(b.user_no = u.no) order by b.group_no desc, b.order_no asc) bb, (SELECT @ROWNUM:=0) TMP ) tb WHERE RNUM BETWEEN ? AND ? order by tb.group_no desc, tb.order_no";
+				sql = "SELECT tb.RNUM , tb.no, tb.user_no, tb.title, tb.hit, tb.reg_date, tb.group_no, tb.order_no, tb.depth, tb.name, tb.status FROM ( SELECT @ROWNUM:=@ROWNUM+1 as RNUM, bb.no, bb.user_no, bb.title, bb.hit, bb.reg_date, bb.group_no, bb.order_no, bb.depth, bb.name, bb.status FROM ( select b.no, b.user_no, b.title, b.hit, b.reg_date, b.group_no, b.order_no, b.depth, u.name, b.status from board b ,user u, (select @ROWNUM:=0 ) tmp where b.user_no = u.no order by b.group_no desc, b.order_no asc ) bb ) tb WHERE RNUM BETWEEN ? AND ?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setLong(1, pi.getStartPage());
 				pstmt.setLong(2, pi.getEndpage());
 			}else {
-				sql = "SELECT tb.RNUM , tb.no, tb.user_no, tb.title, tb.hit, tb.reg_date, tb.group_no, tb.order_no, tb.depth, tb.name, tb.status FROM (SELECT @ROWNUM:=@ROWNUM+1 as RNUM, bb.no, bb.user_no, bb.title, bb.hit, bb.reg_date, bb.group_no, bb.order_no, bb.depth, bb.name , bb.status FROM (select b.no, b.user_no, b.title, b.hit, b.reg_date, b.group_no, b.order_no, b.depth, u.name, b.status from board b join user u on(b.user_no = u.no) where b.title like ? order by b.group_no desc, b.order_no asc) bb, (SELECT @ROWNUM:=0) TMP ) tb WHERE RNUM BETWEEN ? AND ? order by tb.group_no desc, tb.order_no;";
+				sql = "SELECT tb.RNUM , tb.no, tb.user_no, tb.title, tb.hit, tb.reg_date, tb.group_no, tb.order_no, tb.depth, tb.name, tb.status FROM ( SELECT @ROWNUM:=@ROWNUM+1 as RNUM, bb.no, bb.user_no, bb.title, bb.hit, bb.reg_date, bb.group_no, bb.order_no, bb.depth, bb.name , bb.status FROM ( select b.no, b.user_no, b.title, b.hit, b.reg_date, b.group_no, b.order_no, b.depth, u.name, b.status from board b ,user u, (select @ROWNUM:=0 ) tmp where b.user_no = u.no and b.title like ? order by b.group_no desc, b.order_no asc) bb, (SELECT @ROWNUM:=0) TMP ) tb WHERE RNUM BETWEEN ? AND ? order by tb.group_no desc, tb.order_no";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, "%"+kwd+"%");
 				pstmt.setLong(2, pi.getStartPage());
