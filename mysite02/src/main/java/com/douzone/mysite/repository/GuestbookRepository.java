@@ -20,7 +20,7 @@ public class GuestbookRepository {
 		try {
 			conn = getConnection();
 
-			String sql = "insert into Guestbook values(null, ?, ?, ?, now())";
+			String sql = "insert into guestbook values(null, ?, ?, ?, now())";
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, vo.getName());
