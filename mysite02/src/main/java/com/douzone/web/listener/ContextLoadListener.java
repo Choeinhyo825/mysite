@@ -10,7 +10,6 @@ import javax.servlet.annotation.WebListener;
 // Tomcat에서 context : 웹 어플리케이션은 서블릿들이 구성하고 있다.
 // spring에서 context : 비즈니스 클래스(Controller, Service, Repository)
 
-@WebListener
 public class ContextLoadListener implements ServletContextListener {
 
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
