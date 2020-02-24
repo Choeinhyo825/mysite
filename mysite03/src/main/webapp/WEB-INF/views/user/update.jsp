@@ -15,12 +15,12 @@
 		<div id="content">
 			<div id="user">
 				<form id="join-form" name="joinForm" method="post" action="${pageContext.request.contextPath }/user/update">
-					<input type="hidden" name="email" value="${loginUser.email }">
+					<input type="hidden" name="email" value="${userVo.email }">
 					<label class="block-label" for="name">이름</label>
-					<input id="name" name="name" type="text" value="${loginUser.name }" required>
+					<input id="name" name="name" type="text" value="${userVo.name }" required>
 
 					<label class="block-label" for="email">이메일</label>
-					<h4>${loginUser.email }</h4>
+					<h4>${userVo.email }</h4>
 					
 					<label class="block-label">패스워드</label>
 					<input name="pass" type="password" value="">
