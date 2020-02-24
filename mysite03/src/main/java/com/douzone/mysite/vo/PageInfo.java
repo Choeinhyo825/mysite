@@ -2,20 +2,20 @@ package com.douzone.mysite.vo;
 
 public class PageInfo {
 
-	private Long currentPage;
-	private Long limit;
-	private Long maxPage;
-	private Long startPage;
-	private Long endpage;
-	private Long listCount;
-	private Long blockStartNum;
-	private Long blockLastNum;
+	private long currentPage;
+	private long limit;
+	private long maxPage;
+	private long startPage;
+	private long endpage;
+	private long listCount;
+	private long blockStartNum;
+	private long blockLastNum;
 
 	public PageInfo() {
 	}
 
-	public PageInfo(Long currentPage, Long limit, Long maxPage, Long startPage, Long endpage, Long listCount,
-			Long blockStartNum, Long blockLastNum) {
+	public PageInfo(long currentPage, long limit, long maxPage, long startPage, long endpage, long listCount,
+			long blockStartNum, long blockLastNum) {
 		super();
 		this.currentPage = currentPage;
 		this.limit = limit;
@@ -28,67 +28,67 @@ public class PageInfo {
 
 	}
 
-	public Long getBlockStartNum() {
+	public long getBlockStartNum() {
 		return blockStartNum;
 	}
 
-	public void setBlockStartNum(Long blockStartNum) {
+	public void setBlockStartNum(long blockStartNum) {
 		this.blockStartNum = blockStartNum;
 	}
 
-	public Long getBlockLastNum() {
+	public long getBlockLastNum() {
 		return blockLastNum;
 	}
 
-	public void setBlockLastNum(Long blockLastNum) {
+	public void setBlockLastNum(long blockLastNum) {
 		this.blockLastNum = blockLastNum;
 	}
 
-	public Long getListCount() {
+	public long getListCount() {
 		return listCount;
 	}
 
-	public void setListCount(Long listCount) {
+	public void setListCount(long listCount) {
 		this.listCount = listCount;
 	}
 
-	public Long getCurrentPage() {
+	public long getCurrentPage() {
 		return currentPage;
 	}
 
-	public void setCurrentPage(Long currentPage) {
+	public void setCurrentPage(long currentPage) {
 		this.currentPage = currentPage;
 	}
 
-	public Long getLimit() {
+	public long getLimit() {
 		return limit;
 	}
 
-	public void setLimit(Long limit) {
+	public void setLimit(long limit) {
 		this.limit = limit;
 	}
 
-	public Long getMaxPage() {
+	public long getMaxPage() {
 		return maxPage;
 	}
 
-	public void setMaxPage(Long maxPage) {
+	public void setMaxPage(long maxPage) {
 		this.maxPage = maxPage;
 	}
 
-	public Long getStartPage() {
+	public long getStartPage() {
 		return startPage;
 	}
 
-	public void setStartPage(Long startPage) {
+	public void setStartPage(long startPage) {
 		this.startPage = startPage;
 	}
 
-	public Long getEndpage() {
+	public long getEndpage() {
 		return endpage;
 	}
 
-	public void setEndpage(Long endpage) {
+	public void setEndpage(long endpage) {
 		this.endpage = endpage;
 	}
 
