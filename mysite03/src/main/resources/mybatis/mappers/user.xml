@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="user">
+
+	<!-- 회원가입 -->
+	<insert id="insert" parameterType="uservo">
+		<![CDATA[
+		insert into user 
+		values (null, #{name }, #{email }, #{pass }, #{gender }, now())
+		]]>
+		<selectKey keyProperty="no" resultType="long" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<!-- 로그인 -->
+	<select id="findUser" parameterType="uservo" resultType="uservo">
+		<![CDATA[
+		select no, name
+		from user 
+		where email = #{email }
+		and pass = #{pass }
+		]]>
+	</select>
+
+	<!-- 회원정보 수정 폼 -->
+	<select id="findUserInfomation" parameterType="long" resultType="uservo">
+		<![CDATA[
+		select no, name, email, gender 
+		from user where no = #{no}
+		]]>
+	</select>
+	
+	<!-- 회원정보 수정 -->
+	<update id="updateUser" parameterType="uservo">
+		<choose>
+			<when test='"".equals(pass)'>
+				<![CDATA[
+				update user
+				set name = #{name}, gender = #{gender} where email = #{email}
+				]]>
+			</when>
+			<otherwise>
+				<![CDATA[
+				update user 
+				set name = #{name},pass = #{pass}, gender = #{gender} where email = #{email}
+				]]>
+			</otherwise>
+		</choose>
+	
+		
+	</update>
+
+</mapper>
