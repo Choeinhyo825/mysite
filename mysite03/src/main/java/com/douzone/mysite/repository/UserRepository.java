@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Repository;
 
+import com.douzone.mysite.exception.UserRepositoryException;
 import com.douzone.mysite.vo.UserVo;
 
 @Repository
@@ -32,7 +33,7 @@ public class UserRepository {
 			count = pstmt.executeUpdate();
 
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new UserRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (pstmt != null)
@@ -46,7 +47,7 @@ public class UserRepository {
 		return count;
 	}
 
-	public UserVo findByEmailAndPassword(UserVo vo) {
+	public UserVo find(UserVo vo) {
 		UserVo userVo = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -70,7 +71,7 @@ public class UserRepository {
 			}
 
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new UserRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (rset != null)
@@ -86,7 +87,7 @@ public class UserRepository {
 		return userVo;
 	}
 
-	public UserVo findByUserInformation(Long no) {
+	public UserVo find(Long no) {
 		UserVo userVo = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -94,24 +95,22 @@ public class UserRepository {
 
 		try {
 			conn = getConnection();
-			String sql = "select name, email, gender from user where no = ?";
+			String sql = "select no, name, email, gender from user where no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, no);
 			rset = pstmt.executeQuery();
 
 			if (rset.next()) {
-				String name = rset.getString(1);
-				String email = rset.getString(2);
-				String gender = rset.getString(3);
 
 				userVo = new UserVo();
-				userVo.setName(name);
-				userVo.setEmail(email);
-				userVo.setGender(gender);
+				userVo.setNo(rset.getLong(1));
+				userVo.setName(rset.getString(2));
+				userVo.setEmail(rset.getString(3));
+				userVo.setGender(rset.getString(4));
 			}
 
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new UserRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (rset != null)
@@ -153,7 +152,7 @@ public class UserRepository {
 			count = pstmt.executeUpdate();
 
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new UserRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (pstmt != null)

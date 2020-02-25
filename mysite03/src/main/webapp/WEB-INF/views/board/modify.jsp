@@ -18,7 +18,7 @@
 				<form class="board-form" method="post" action="board">
 				<input type="hidden" value="modify" name="a">
 				<input type="hidden" value="${vo.no }" name="boardNo">
-				<input type="hidden" value="${loginUser.no }" name="userNo">
+				<input type="hidden" value="${authUser.no }" name="userNo">
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글수정</th>

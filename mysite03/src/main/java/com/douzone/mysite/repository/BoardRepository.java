@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.douzone.mysite.exception.BoardRepositoryException;
 import com.douzone.mysite.vo.BoardVo;
 import com.douzone.mysite.vo.PageInfo;
 
@@ -40,7 +41,7 @@ public class BoardRepository {
 				listCount = rset.getLong(1);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new BoardRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (rset != null)
@@ -116,7 +117,7 @@ public class BoardRepository {
 			}
 
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new BoardRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (rset != null)
@@ -168,7 +169,7 @@ public class BoardRepository {
 			}
 
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new BoardRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (rset != null)
@@ -204,7 +205,7 @@ public class BoardRepository {
 			result = count == 1;
 
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new BoardRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (pstmt != null)
@@ -238,7 +239,7 @@ public class BoardRepository {
 				result = count == 1;
 				
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new BoardRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (pstmt != null)
@@ -273,7 +274,7 @@ public class BoardRepository {
 			result = count == 1;
 
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new BoardRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (pstmt != null)
@@ -311,7 +312,7 @@ public class BoardRepository {
 				result = count == 1;
 				
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new BoardRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (pstmt != null)
@@ -346,7 +347,7 @@ public class BoardRepository {
 			result = count == 1;
 
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new BoardRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (pstmt != null)
@@ -379,7 +380,7 @@ public class BoardRepository {
 			result = count == 1;
 
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new BoardRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (pstmt != null)
