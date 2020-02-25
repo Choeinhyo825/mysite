@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.douzone.mysite.exception.GuestBookRepositoryException;
@@ -15,13 +18,17 @@ import com.douzone.mysite.vo.GuestbookVo;
 
 @Repository
 public class GuestbookRepository {
+
+	@Autowired
+	private DataSource dataSource;
+
 	public int insert(GuestbookVo vo) {
 		int count = 0;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
 			String sql = "insert into guestbook values(null, ?, ?, ?, now())";
 			pstmt = conn.prepareStatement(sql);
@@ -53,7 +60,7 @@ public class GuestbookRepository {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
 			String sql = "delete from guestbook where no=? and pass=?";
 			pstmt = conn.prepareStatement(sql);
@@ -86,8 +93,8 @@ public class GuestbookRepository {
 		ResultSet rset = null;
 
 		try {
-			conn = getConnection();
-			String sql = "select no, name, contents, reg_date from guestbook order by 1 desc";
+			conn = dataSource.getConnection();
+			String sql = "select nodataSource.getConnection();, reg_date from guestbook order by 1 desc";
 			pstmt = conn.prepareStatement(sql);
 			rset = pstmt.executeQuery();
 
@@ -121,19 +128,6 @@ public class GuestbookRepository {
 			}
 		}
 		return list;
-	}
-
-	public Connection getConnection() throws SQLException {
-
-		Connection conn = null;
-		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mysql://192.168.1.101:3307/webdb";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-		} catch (ClassNotFoundException e) {
-			System.err.println("드라이버 로딩 실패 : " + e);
-		}
-		return conn;
 	}
 
 }

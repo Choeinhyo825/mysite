@@ -8,11 +8,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.douzone.mysite.exception.BoardRepositoryException;
 import com.douzone.mysite.vo.BoardVo;
 import com.douzone.mysite.vo.PageInfo;
 
+@Repository
 public class BoardRepository {
+	
+	@Autowired
+	private DataSource dataSource;	
 	
 	// 총 게시글 count
 	public long searchBoardListCount(String kwd) {
@@ -25,7 +34,7 @@ public class BoardRepository {
 		long listCount = 0;
 		
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			
 			if(kwd == null) {
 				sql = "SELECT COUNT(*) FROM board";
@@ -70,7 +79,7 @@ public class BoardRepository {
 		String sql;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			
 			if(kwd == null) {
 				sql = "SELECT tb.RNUM , tb.no, tb.user_no, tb.title, tb.hit, tb.reg_date, tb.group_no, tb.order_no, tb.depth, tb.name, tb.status FROM ( SELECT @ROWNUM:=@ROWNUM+1 as RNUM, bb.no, bb.user_no, bb.title, bb.hit, bb.reg_date, bb.group_no, bb.order_no, bb.depth, bb.name, bb.status FROM ( select b.no, b.user_no, b.title, b.hit, b.reg_date, b.group_no, b.order_no, b.depth, u.name, b.status from board b ,user u, (select @ROWNUM:=0 ) tmp where b.user_no = u.no order by b.group_no desc, b.order_no asc ) bb ) tb WHERE RNUM BETWEEN ? AND ?";
@@ -141,7 +150,7 @@ public class BoardRepository {
 		ResultSet rset = null;
 		BoardVo vo = new BoardVo();
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			String sql = "select no, title, contents, user_no, group_no, order_no, depth, status from board where no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, num);
@@ -192,7 +201,7 @@ public class BoardRepository {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
 			String sql = "update board set hit = (select * from (select b.hit+1 from board b where b.no=?)as a) where no = ? and status like 'y'";
 			pstmt = conn.prepareStatement(sql);
@@ -226,7 +235,7 @@ public class BoardRepository {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
 				String sql = "insert into board values(null, ?, ?, ?, 0, now(), ifnull((select max(group_no)+1 from board b),1),1,0,'y')";
 				pstmt = conn.prepareStatement(sql);
@@ -262,7 +271,7 @@ public class BoardRepository {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
 			String sql = "update board set order_no = order_no +1 where group_no = ? and order_no > ?";
 			pstmt = conn.prepareStatement(sql);
@@ -295,7 +304,7 @@ public class BoardRepository {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
 				String sql = "insert into board values(null, ?, ?, ?, 0, now(), ?,?,?, 'y')";
 				pstmt = conn.prepareStatement(sql);
@@ -333,7 +342,7 @@ public class BoardRepository {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
 			String sql = "update board set title = ?, contents = ? where no = ? and user_no = ?";
 			pstmt = conn.prepareStatement(sql);
@@ -368,7 +377,7 @@ public class BoardRepository {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
 			String sql = "update board set status = 'n', title = '' where no = ?";
 			pstmt = conn.prepareStatement(sql);
@@ -392,19 +401,6 @@ public class BoardRepository {
 			}
 		}
 		return result;
-	}
-
-	public Connection getConnection() throws SQLException {
-
-		Connection conn = null;
-		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mysql://192.168.1.101:3307/webdb";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-		} catch (ClassNotFoundException e) {
-			System.err.println("드라이버 로딩 실패 : " + e);
-		}
-		return conn;
 	}
 
 }
