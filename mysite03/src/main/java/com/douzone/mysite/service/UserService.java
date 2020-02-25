@@ -18,11 +18,11 @@ public class UserService {
 	}
 
 	public UserVo getUser(UserVo vo) {
-		return userRepository.findByEmailAndPassword(vo);
+		return userRepository.find(vo);
 	}
 
-	public UserVo getUserInformation(Long no) {
-		return userRepository.findByUserInformation(no);
+	public UserVo getUser(Long no) {
+		return userRepository.find(no);
 	}
 	
 	public Boolean updateUser(UserVo vo) {

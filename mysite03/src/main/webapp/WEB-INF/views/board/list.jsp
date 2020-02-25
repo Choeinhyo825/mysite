@@ -48,7 +48,7 @@
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
 							<td>
-								<c:if test="${loginUser.no eq vo.userNo }">
+								<c:if test="${authUser.no eq vo.userNo }">
 									<c:if test='${vo.status eq "y" }'>
 										<a href="${pageContext.servletContext.contextPath }/board?a=deleteForm&no=${vo.no}" class="del">
 											<img alt="" src="${pageContext.servletContext.contextPath }/assets/images/recycle.png">
@@ -130,7 +130,7 @@
 					</ul>
 				</div>					
 				<!-- pager 추가 -->
-				<c:if test="${!empty loginUser }">
+				<c:if test="${!empty authUser }">
 					<div class="bottom">
 						<a href="${pageContext.servletContext.contextPath }/board?a=writeForm" id="new-book">글쓰기</a>
 					</div>	

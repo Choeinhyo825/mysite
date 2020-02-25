@@ -51,13 +51,14 @@
 				</table>
 				<div class="bottom">
 					<a href="${pageContext.request.contextPath }/board?a=list">글목록</a>
+					<!-- ???????????????????????? -->
 					<c:choose>
-						<c:when test="${!empty loginUser && loginUser.no eq vo.userNo }">
+						<c:when test="${!empty authUser && authUser.no eq vo.userNo }">
 							<c:if test='${vo.status eq "y" }'>
 								<a href="${pageContext.request.contextPath }/board?a=modifyForm&no=${vo.no}">글수정</a>
 							</c:if>
 						</c:when>
-						<c:when test="${!empty loginUser && loginUser.no ne vo.userNo}">
+						<c:when test="${!empty authUser && authUser.no ne vo.userNo}">
 							<form action="board" method="post" >
 								<input type="hidden" value="writeForm" name=a>
 								<input type="hidden" value="${vo.no }" name="boardNo">

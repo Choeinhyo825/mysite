@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -53,11 +54,11 @@ public class UserContoller {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(HttpSession session, @ModelAttribute UserVo vo) {
-		UserVo loginUser = userService.getUser(vo);
-		if(loginUser == null) {
+		UserVo authUser = userService.getUser(vo);
+		if(authUser == null) {
 			return "user/login";
 		}
-		session.setAttribute("loginUser", loginUser);
+		session.setAttribute("authUser", authUser);
 		return "redirect:/";
 	}
 	/* 
@@ -65,7 +66,15 @@ public class UserContoller {
 	 */
 	@RequestMapping("/logout")
 	public String logout(HttpSession session) {
-		session.removeAttribute("loginUSer");
+		
+		//////////////////////////// 접근제어 ///////////////////////////
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		if(authUser == null) {
+			return "redirect:/";
+		}
+		//////////////////////////////////////////////////////////////
+		
+		session.removeAttribute("authUser");
 		session.invalidate();
 		return "redirect:/";
 	}
@@ -74,8 +83,15 @@ public class UserContoller {
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.GET)
 	public String update(HttpSession session, Model model) {
-		UserVo vo = (UserVo)session.getAttribute("loginUser");
-		vo = userService.getUserInformation(vo.getNo());
+		
+		//////////////////////////// 접근제어 ///////////////////////////
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		if(authUser == null) {
+			return "redirect:/";
+		}
+		//////////////////////////////////////////////////////////////
+		
+		UserVo vo = userService.getUser(authUser.getNo());
 		model.addAttribute("userVo",vo);
 		return "/user/update";
 	}
@@ -83,8 +99,21 @@ public class UserContoller {
 	 * 회원정보 수정
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(UserVo vo) {
+	public String update(HttpSession session, UserVo vo) {
+		
+		//////////////////////////// 접근제어 ///////////////////////////
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		if(authUser == null) {
+			return "redirect:/";
+		}
+		//////////////////////////////////////////////////////////////
+		
 		 userService.updateUser(vo);
 		return "/user/updatesuccess";
 	}
+	
+//	@ExceptionHandler(Exception.class)
+//	public String handleException() {
+//		return "error/exception";
+//	}
 }

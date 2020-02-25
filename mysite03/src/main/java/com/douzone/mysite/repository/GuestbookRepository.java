@@ -1,6 +1,5 @@
 package com.douzone.mysite.repository;
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,12 +10,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.douzone.mysite.exception.GuestBookRepositoryException;
 import com.douzone.mysite.vo.GuestbookVo;
 
 @Repository
 public class GuestbookRepository {
 	public int insert(GuestbookVo vo) {
-		int count=0;
+		int count = 0;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
@@ -33,7 +33,7 @@ public class GuestbookRepository {
 			count = pstmt.executeUpdate();
 
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new GuestBookRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (pstmt != null)
@@ -46,9 +46,9 @@ public class GuestbookRepository {
 		}
 		return count;
 	}
-	
+
 	public int delete(Long no, String pass) {
-		int count =0;
+		int count = 0;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
@@ -64,7 +64,7 @@ public class GuestbookRepository {
 			count = pstmt.executeUpdate();
 
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new GuestBookRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (pstmt != null)
@@ -96,7 +96,7 @@ public class GuestbookRepository {
 				String name = rset.getString(2);
 				String contents = rset.getString(3);
 				String regDate = rset.getString(4);
-				
+
 				GuestbookVo vo = new GuestbookVo();
 
 				vo.setNo(no);
@@ -107,7 +107,7 @@ public class GuestbookRepository {
 			}
 
 		} catch (SQLException e) {
-			System.err.println("에러 발생 : " + e);
+			throw new GuestBookRepositoryException(e.getMessage());
 		} finally {
 			try {
 				if (rset != null)

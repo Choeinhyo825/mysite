@@ -17,7 +17,7 @@
 			<div id="board">
 				<form class="board-form" method="post" action="board">
 					<input type="hidden" name = "a" value="write">
-					<input type="hidden" value="${loginUser.no }"name = "userNo">
+					<input type="hidden" value="${authUser.no }"name = "userNo">
 					<input type="hidden" value="${vo.no }" name="boardNo">
 					<input type="hidden" value="${vo.gno }" name="gno">
 					<input type="hidden" value="${vo.ono }" name="ono">
