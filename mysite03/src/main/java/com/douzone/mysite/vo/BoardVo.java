@@ -2,18 +2,18 @@ package com.douzone.mysite.vo;
 
 public class BoardVo {
 
-	private long no;
-	private long userNo;
+	private Long   no;
+	private Long   userNo;
 	private String title;
 	private String contents;
-	private long hit;
+	private Long   hit;
 	private String regDate;
-	private long gno;
-	private long ono;
-	private long depth;
+	private Long   gno;
+	private Long   ono;
+	private Long   depth;
 	private String status;
 
-	private long rnum;
+	private Long   rnum;
 	private String name;
 
 	public String getStatus() {
@@ -24,27 +24,27 @@ public class BoardVo {
 		this.status = status;
 	}
 
-	public long getRnum() {
+	public Long   getRnum() {
 		return rnum;
 	}
 
-	public void setRnum(long rnum) {
+	public void setRnum(Long   rnum) {
 		this.rnum = rnum;
 	}
 
-	public long getNo() {
+	public Long   getNo() {
 		return no;
 	}
 
-	public void setNo(long no) {
+	public void setNo(Long   no) {
 		this.no = no;
 	}
 
-	public long getUserNo() {
+	public Long   getUserNo() {
 		return userNo;
 	}
 
-	public void setUserNo(long userNo) {
+	public void setUserNo(Long   userNo) {
 		this.userNo = userNo;
 	}
 
@@ -64,11 +64,11 @@ public class BoardVo {
 		this.contents = contents;
 	}
 
-	public long getHit() {
+	public Long   getHit() {
 		return hit;
 	}
 
-	public void setHit(long hit) {
+	public void setHit(Long   hit) {
 		this.hit = hit;
 	}
 
@@ -80,27 +80,27 @@ public class BoardVo {
 		this.regDate = regDate;
 	}
 
-	public long getGno() {
+	public Long   getGno() {
 		return gno;
 	}
 
-	public void setGno(long gno) {
+	public void setGno(Long   gno) {
 		this.gno = gno;
 	}
 
-	public long getOno() {
+	public Long   getOno() {
 		return ono;
 	}
 
-	public void setOno(long ono) {
+	public void setOno(Long   ono) {
 		this.ono = ono;
 	}
 
-	public long getDepth() {
+	public Long   getDepth() {
 		return depth;
 	}
 
-	public void setDepth(long depth) {
+	public void setDepth(Long  depth) {
 		this.depth = depth;
 	}
 
