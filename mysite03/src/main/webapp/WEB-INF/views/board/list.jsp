@@ -14,7 +14,7 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="board?a=list" method="post">
+				<form id="search_form" action="${pageContext.servletContext.contextPath }/board" method="post">
 					<input type="text" id="kwd" name="kwd" placeholder="제목으로 검색하세요" required>
 					<input type="submit" value="찾기">
 				</form>
@@ -30,14 +30,14 @@
 					</tr>				
 					<c:forEach items="${list }" var="vo" varStatus="status">
 						<tr>
-							<td>${pi.listCount-vo.rnum+1 }</td>
+							<td>${(pi.listCount-vo.rnum)+1 } </td>
 							<td style="text-align: left; padding-left: ${30*vo.depth}px">
 								<c:if test="${vo.depth > 0 }">
 									<img src="${pageContext.servletContext.contextPath }/assets/images/reply.png">
 								</c:if>
 								<c:choose>
 									<c:when test='${vo.status eq "y"}'>
-										<a href="${pageContext.servletContext.contextPath }/board?a=view&no=${vo.no}">${vo.title }</a>
+										<a href="${pageContext.servletContext.contextPath }/board/view/${vo.no}">${vo.title }</a>
 									</c:when>
 									<c:otherwise>
 										<a style="color: gray;">삭제된 게시글 입니다.</a>
@@ -50,7 +50,7 @@
 							<td>
 								<c:if test="${authUser.no eq vo.userNo }">
 									<c:if test='${vo.status eq "y" }'>
-										<a href="${pageContext.servletContext.contextPath }/board?a=deleteForm&no=${vo.no}" class="del">
+										<a href="${pageContext.servletContext.contextPath }/board/delete/${vo.no}" class="del">
 											<img alt="" src="${pageContext.servletContext.contextPath }/assets/images/recycle.png">
 										</a>
 									</c:if>
@@ -62,8 +62,6 @@
 				
 				<!-- pager 추가 -->
 				<div class="pager">
-						<c:set var="blockStartNum" value ="${pi.blockStartNum }"/>
-						<c:set var="blockLastNum" value ="${pi.blockLastNum }"/>
 					<ul>
 						<c:choose>
 							<c:when test="${pi.currentPage == 1}">
@@ -71,17 +69,17 @@
 							</c:when>
 							<c:otherwise>
 								<c:choose>
-									<c:when test="${!empty kwd}">
-										<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${pi.currentPage -1}&bsn=${blockStartNum }&bln=${blockLastNum}&kwd=${kwd}">◀</a></li>
+									<c:when test='${"" ne pi.keyword}'>
+										<li><a href="${pageContext.request.contextPath }/board?p=${pi.currentPage -1}&bsn=${pi.blockStartNum }&bln=${pi.blockLastNum}&kwd=${pi.keyword}">◀</a></li>
 									</c:when>
 									<c:otherwise>
-										<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${pi.currentPage -1}&bsn=${blockStartNum }&bln=${blockLastNum}">◀</a></li>
+										<li><a href="${pageContext.request.contextPath }/board?p=${pi.currentPage -1}&bsn=${pi.blockStartNum }&bln=${pi.blockLastNum}">◀</a></li>
 									</c:otherwise>
 								</c:choose>
 							</c:otherwise>
 						</c:choose>
 						
-						<c:forEach varStatus="vs" begin="${blockStartNum }" end="${blockLastNum}" step="1">
+						<c:forEach varStatus="vs" begin="${pi.blockStartNum }" end="${pi.blockLastNum}" step="1">
 							<c:choose>
 								<c:when test="${vs.index eq pi.currentPage}">
 									<c:choose>
@@ -97,11 +95,11 @@
 									<c:choose>
 										<c:when test="${pi.maxPage >= vs.index}">
 											<c:choose>
-												<c:when test="${!empty kwd}">
-													<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${vs.index }&bsn=${blockStartNum }&bln=${blockLastNum}&kwd=${kwd}">${vs.index }</a></li>
+												<c:when test='${"" ne pi.keyword}'>
+													<li><a href="${pageContext.request.contextPath }/board?p=${vs.index }&bsn=${pi.blockStartNum }&bln=${pi.blockLastNum}&kwd=${pi.keyword}">${vs.index }</a></li>												
 												</c:when>
 												<c:otherwise>
-													<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${vs.index }&bsn=${blockStartNum }&bln=${blockLastNum}">${vs.index }</a></li>
+													<li><a href="${pageContext.request.contextPath }/board?p=${vs.index }&bsn=${pi.blockStartNum }&bln=${pi.blockLastNum}">${vs.index }</a></li>
 												</c:otherwise>
 											</c:choose>
 										</c:when>
@@ -118,11 +116,11 @@
 							</c:when>
 							<c:otherwise>
 								<c:choose>
-									<c:when test="${!empty kwd}">
-										<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${pi.currentPage +1}&bsn=${blockStartNum }&bln=${blockLastNum}&kwd=${kwd}">▶</a></li>
+									<c:when test='${"" ne pi.keyword}'>
+										<li><a href="${pageContext.request.contextPath }/board?p=${pi.currentPage +1}&bsn=${pi.blockStartNum }&bln=${pi.blockLastNum}&kwd=${pi.keyword}">▶</a></li>
 									</c:when>
 									<c:otherwise>
-										<li><a href="${pageContext.request.contextPath }/board?a=list&currentPage=${pi.currentPage +1}&bsn=${blockStartNum }&bln=${blockLastNum}">▶</a></li>
+										<li><a href="${pageContext.request.contextPath }/board?p=${pi.currentPage +1}&bsn=${pi.blockStartNum }&bln=${pi.blockLastNum}">▶</a></li>
 									</c:otherwise>
 								</c:choose>
 							</c:otherwise>
@@ -132,7 +130,7 @@
 				<!-- pager 추가 -->
 				<c:if test="${!empty authUser }">
 					<div class="bottom">
-						<a href="${pageContext.servletContext.contextPath }/board?a=writeForm" id="new-book">글쓰기</a>
+						<a href="${pageContext.servletContext.contextPath }/board/write" id="new-book">글쓰기</a>
 					</div>	
 				</c:if>
 			</div>

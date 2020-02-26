@@ -2,20 +2,20 @@ package com.douzone.mysite.vo;
 
 public class PageInfo {
 
-	private long currentPage;
-	private long limit;
-	private long maxPage;
-	private long startPage;
-	private long endpage;
-	private long listCount;
-	private long blockStartNum;
-	private long blockLastNum;
+	private Long currentPage;
+	private Long limit;
+	private Long maxPage;
+	private Long startPage;
+	private Long endpage;
+	private Long listCount;
+	private Long blockStartNum;
+	private Long blockLastNum;
+	private String keyword;
 
 	public PageInfo() {
 	}
 
-	public PageInfo(long currentPage, long limit, long maxPage, long startPage, long endpage, long listCount,
-			long blockStartNum, long blockLastNum) {
+	public PageInfo(Long currentPage, Long limit, Long maxPage, Long startPage, Long endpage, Long listCount,Long blockStartNum, Long blockLastNum, String keyword) {
 		super();
 		this.currentPage = currentPage;
 		this.limit = limit;
@@ -25,82 +25,97 @@ public class PageInfo {
 		this.listCount = listCount;
 		this.blockStartNum = blockStartNum;
 		this.blockLastNum = blockLastNum;
-
+		this.keyword = keyword;
 	}
-
-	public long getBlockStartNum() {
-		return blockStartNum;
-	}
-
-	public void setBlockStartNum(long blockStartNum) {
+	
+	public PageInfo(Long currentPage, Long limit, Long blockStartNum, Long blockLastNum, String keyword) {
+		super();
+		this.currentPage = currentPage;
+		this.limit = limit;
 		this.blockStartNum = blockStartNum;
-	}
-
-	public long getBlockLastNum() {
-		return blockLastNum;
-	}
-
-	public void setBlockLastNum(long blockLastNum) {
 		this.blockLastNum = blockLastNum;
+		this.keyword = keyword;
 	}
 
-	public long getListCount() {
-		return listCount;
-	}
-
-	public void setListCount(long listCount) {
-		this.listCount = listCount;
-	}
-
-	public long getCurrentPage() {
+	public Long getCurrentPage() {
 		return currentPage;
 	}
 
-	public void setCurrentPage(long currentPage) {
+	public void setCurrentPage(Long currentPage) {
 		this.currentPage = currentPage;
 	}
 
-	public long getLimit() {
+	public Long getLimit() {
 		return limit;
 	}
 
-	public void setLimit(long limit) {
+	public void setLimit(Long limit) {
 		this.limit = limit;
 	}
 
-	public long getMaxPage() {
+	public Long getMaxPage() {
 		return maxPage;
 	}
 
-	public void setMaxPage(long maxPage) {
+	public void setMaxPage(Long maxPage) {
 		this.maxPage = maxPage;
 	}
 
-	public long getStartPage() {
+	public Long getStartPage() {
 		return startPage;
 	}
 
-	public void setStartPage(long startPage) {
+	public void setStartPage(Long startPage) {
 		this.startPage = startPage;
 	}
 
-	public long getEndpage() {
+	public Long getEndpage() {
 		return endpage;
 	}
 
-	public void setEndpage(long endpage) {
+	public void setEndpage(Long endpage) {
 		this.endpage = endpage;
+	}
+
+	public Long getListCount() {
+		return listCount;
+	}
+
+	public void setListCount(Long listCount) {
+		this.listCount = listCount;
+	}
+
+	public Long getBlockStartNum() {
+		return blockStartNum;
+	}
+
+	public void setBlockStartNum(Long blockStartNum) {
+		this.blockStartNum = blockStartNum;
+	}
+
+	public Long getBlockLastNum() {
+		return blockLastNum;
+	}
+
+	public void setBlockLastNum(Long blockLastNum) {
+		this.blockLastNum = blockLastNum;
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
 
 	@Override
 	public String toString() {
 		return "PageInfo [currentPage=" + currentPage + ", limit=" + limit + ", maxPage=" + maxPage + ", startPage="
 				+ startPage + ", endpage=" + endpage + ", listCount=" + listCount + ", blockStartNum=" + blockStartNum
-				+ ", blockLastNum=" + blockLastNum + "]";
+				+ ", blockLastNum=" + blockLastNum + ", keyword=" + keyword + "]";
 	}
 
 	
 	
-	
-
 }

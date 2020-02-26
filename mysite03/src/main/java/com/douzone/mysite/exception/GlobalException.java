@@ -19,6 +19,7 @@ public class GlobalException {
 		// 1. 로깅(logging)
 		StringWriter errors = new StringWriter(); // 버퍼
 		e.printStackTrace(new PrintWriter(errors));
+		e.printStackTrace();
 
 		// LOGGER.error(errors.toString());
 

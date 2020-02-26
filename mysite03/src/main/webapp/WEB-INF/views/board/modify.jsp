@@ -15,27 +15,26 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form class="board-form" method="post" action="board">
-				<input type="hidden" value="modify" name="a">
-				<input type="hidden" value="${vo.no }" name="boardNo">
+				<form class="board-form" method="post" action="${pageContext.request.contextPath }/board/modify">
+				<input type="hidden" value="${vo.no }" name="no">
 				<input type="hidden" value="${authUser.no }" name="userNo">
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글수정</th>
 						</tr>
 						<tr>
-							<td class="label">제목</td>
+							<td class="label">제목</td>	
 							<td><input type="text" name="title" value="${vo.title }"></td>
 						</tr>
 						<tr>
 							<td class="label">내용</td>
 							<td>
-								<textarea id="content" name="content">${vo.contents}</textarea>
+								<textarea id="content" name="contents">${vo.contents}</textarea>
 							</td>
 						</tr>
 					</table>
 					<div class="bottom">
-						<a href="board?a=view&no=${vo.no }">취소</a>
+						<a href="board/view/${vo.no }">취소</a>
 						<input type="submit" value="수정">
 					</div>
 				</form>				
