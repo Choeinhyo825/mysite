@@ -25,7 +25,10 @@ public class GuestBookService {
 	}
 
 	public Boolean delete(Long no, String pass) {
-		int count = GuestbookRepository.delete(no,pass);
+		GuestbookVo vo = new GuestbookVo();
+		vo.setNo(no);
+		vo.setPass(pass);
+		int count = GuestbookRepository.delete(vo);
 		return count == 1;
 		
 	}
