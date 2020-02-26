@@ -48,8 +48,6 @@
 				]]>
 			</otherwise>
 		</choose>
-	
-		
 	</update>
 
 </mapper>
