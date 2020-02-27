@@ -2,8 +2,6 @@ package com.douzone.mysite.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +15,8 @@ import com.douzone.mysite.service.BoardService;
 import com.douzone.mysite.vo.BoardVo;
 import com.douzone.mysite.vo.PageInfo;
 import com.douzone.mysite.vo.UserVo;
+import com.douzone.security.Auth;
+import com.douzone.security.AuthUser;
 
 @Controller
 @RequestMapping("/board")
@@ -26,8 +26,7 @@ public class BoardController {
 	BoardService boardService;
 
 	@RequestMapping("")
-	public String list(Model model,
-			@RequestParam(value = "p", required = true, defaultValue = "1") Long currentPage,
+	public String list(Model model, @RequestParam(value = "p", required = true, defaultValue = "1") Long currentPage,
 			@RequestParam(value = "kwd", required = true, defaultValue = "") String keyword,
 			@RequestParam(value = "bsn", required = true, defaultValue = "1") Long blockStartNum,
 			@RequestParam(value = "bln", required = true, defaultValue = "5") Long blockLastNum) {
@@ -37,7 +36,7 @@ public class BoardController {
 		pi.setKeyword(keyword);
 		pi.setBlockStartNum(blockStartNum);
 		pi.setBlockLastNum(blockLastNum);
-		
+
 		pi = boardService.getCount(pi);
 
 		List<BoardVo> list = boardService.getList(pi);
@@ -46,28 +45,21 @@ public class BoardController {
 		return "board/list";
 	}
 
+	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public String write() {
 		return "board/write";
 	}
 
+	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String write(HttpSession session, @ModelAttribute BoardVo vo) {
-
-		///////////////////////////// 접근제어////////////////////////
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		if (authUser == null) {
-			return "redirect:/board";
-		}
-		///////////////////////////////////////////////////////////
-
+	public String write(@AuthUser UserVo authUser, @ModelAttribute BoardVo vo) {
 		vo.setUserNo(authUser.getNo());
-
 		if (vo.getGno() != null) {
 			boardService.increaseGroupOrderNo(vo);
 		}
 		Long no = boardService.addContents(vo);
-		return "redirect:/board/view/"+no;
+		return "redirect:/board/view/" + no;
 	}
 
 	@RequestMapping(value = "/view/{no}", method = RequestMethod.GET)
@@ -77,20 +69,14 @@ public class BoardController {
 		return "board/view";
 	}
 
+	@Auth
 	@RequestMapping(value = "/delete/{no}", method = RequestMethod.GET)
-	public String delete(@PathVariable("no") Long no, HttpSession session) {
-
-		///////////////////////////// 접근제어////////////////////////
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		if (authUser == null) {
-			return "redirect:/";
-		}
-		///////////////////////////////////////////////////////////
-
+	public String delete(@PathVariable("no") Long no, @AuthUser UserVo authUser) {
 		boardService.deleteContents(no, authUser.getNo());
 		return "redirect:/board";
 	}
 
+	@Auth
 	@RequestMapping(value = "/reply/{no}")
 	public String reply(@PathVariable("no") Long no, Model model) {
 
@@ -102,31 +88,17 @@ public class BoardController {
 		return "board/reply";
 	}
 
+	@Auth
 	@RequestMapping(value = "/modify/{no}", method = RequestMethod.GET)
-	public String modify(HttpSession session, @PathVariable("no") Long no, Model model) {
-
-		///////////////////////////// 접근제어////////////////////////
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		if (authUser == null) {
-			return "redirect:/";
-		}
-		///////////////////////////////////////////////////////////
-
+	public String modify(@PathVariable("no") Long no, Model model) {
 		BoardVo vo = boardService.getContents(no);
 		model.addAttribute("vo", vo);
 		return "board/modify";
 	}
 
+	@Auth
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public String modify(HttpSession session, @ModelAttribute BoardVo vo) {
-
-		///////////////////////////// 접근제어////////////////////////
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
-		if (authUser == null) {
-			return "redirect:/";
-		}
-		///////////////////////////////////////////////////////////
-
+	public String modify(@AuthUser UserVo authUser, @ModelAttribute BoardVo vo) {
 		vo.setUserNo(authUser.getNo());
 		boardService.modifyContents(vo);
 		return "redirect:/board/view/" + vo.getNo();

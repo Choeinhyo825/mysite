@@ -18,8 +18,8 @@
 					<input type="text" id="kwd" name="kwd" placeholder="제목으로 검색하세요" required>
 					<input type="submit" value="찾기">
 				</form>
-				
-				<table class="tbl-ex">
+				<div style="height: 250px;">
+					<table class="tbl-ex">
 					<tr>	
 						<th>번호</th>
 						<th>제목</th>
@@ -59,7 +59,7 @@
 						</tr>
 					</c:forEach>
 				</table>
-				
+				</div>
 				<!-- pager 추가 -->
 				<div class="pager">
 					<ul>

@@ -7,7 +7,7 @@
 	<insert id="insert" parameterType="uservo">
 		<![CDATA[
 		insert into user 
-		values (null, #{name }, #{email }, #{pass }, #{gender }, now())
+		values (null, #{name }, #{email }, #{pass }, #{gender }, now(), 'USER')
 		]]>
 		<selectKey keyProperty="no" resultType="long" order="AFTER">
 			select last_insert_id()
@@ -17,7 +17,7 @@
 	<!-- 로그인 -->
 	<select id="findUser" parameterType="uservo" resultType="uservo">
 		<![CDATA[
-		select no, name
+		select no, name, role
 		from user 
 		where email = #{email }
 		and pass = #{pass }
