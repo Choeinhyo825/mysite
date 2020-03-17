@@ -32,7 +32,7 @@ public class AdminService {
 
 			int lastIndex = originFilename.lastIndexOf('.');
 			String saveFilename = generateSaveFilename(originFilename.substring(lastIndex + 1));
-//			long fileSize = multipartFile.getSize();
+			// long fileSize = multipartFile.getSize();
 
 			byte[] fileData = multipartFile.getBytes();
 			OutputStream os = new FileOutputStream(SAVE_PATH + "/" + saveFilename);
@@ -42,7 +42,6 @@ public class AdminService {
 			if (!multipartFile.isEmpty()) {
 				vo.setProfileImage(url);
 			}
-			System.out.println(vo);
 			adminRepository.profileUpdate(vo);
 
 			return true;
