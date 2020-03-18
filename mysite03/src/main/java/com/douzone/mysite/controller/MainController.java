@@ -10,6 +10,7 @@ import com.douzone.mysite.vo.SiteVo;
 
 @Controller
 public class MainController{
+	
 	@Autowired
 	AdminService adminService;
 
