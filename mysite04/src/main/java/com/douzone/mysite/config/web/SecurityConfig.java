@@ -17,10 +17,9 @@ import com.douzone.security.LogoutInterceptor;
 @Configuration
 public class SecurityConfig extends WebMvcConfigurerAdapter {
 
-	// validator, conversionService, messageConverter를 자동으로 등록
 	// Argument Resolver
 	@Bean
-	public AuthUserHandlerMethodArgumentResolver authUserHandlerMethodArgumentResolver() {
+	public HandlerMethodArgumentResolver authUserHandlerMethodArgumentResolver() {
 		return new AuthUserHandlerMethodArgumentResolver();
 	}
 
@@ -50,7 +49,6 @@ public class SecurityConfig extends WebMvcConfigurerAdapter {
 		registry.addInterceptor(loginInterceptor()).addPathPatterns("/user/auth");
 		registry.addInterceptor(logoutInterceptor()).addPathPatterns("/user/logout");
 		registry.addInterceptor(authInterceptor()).addPathPatterns("/**").excludePathPatterns("/user/auth")
-				.excludePathPatterns("/user/logout").excludePathPatterns("/user/logout");
+				.excludePathPatterns("/user/logout").excludePathPatterns("/assets/**");
 	}
-
 }

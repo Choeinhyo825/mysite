@@ -4,6 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 	<display-name>mysite04</display-name>
+
 	<context-param>
 		<param-name>contextClass</param-name>
 		<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
@@ -24,6 +25,7 @@
 			<param-name>encoding</param-name>
 			<param-value>UTF-8</param-value>
 		</init-param>
+
 		<init-param>
 			<param-name>forceEncoding</param-name>
 			<param-value>true</param-value>
@@ -42,7 +44,7 @@
 			<param-name>contextClass</param-name>
 			<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
 		</init-param>
-				<init-param>
+		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>com.douzone.mysite.config.WebConfig</param-value>
 		</init-param>
@@ -62,6 +64,7 @@
 		<error-code>500</error-code>
 		<location>/WEB-INF/views/error/500.jsp</location>
 	</error-page>
+
 
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
