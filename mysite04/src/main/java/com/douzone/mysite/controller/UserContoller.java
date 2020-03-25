@@ -27,7 +27,7 @@ public class UserContoller {
 	 */
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public String join(@ModelAttribute UserVo vo) {
-		
+
 		return "user/join";
 	}
 
@@ -36,19 +36,18 @@ public class UserContoller {
 	 */
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
 	public String join(@ModelAttribute @Valid UserVo vo, BindingResult result, Model model) {
-		if(result.hasErrors()) {
-			 
-			//List<ObjectError> list = result.getAllErrors();
-			//for(ObjectError error:list) {
-			//	System.out.println(error);
-			//}
+		if (result.hasErrors()) {
+
+			// List<ObjectError> list = result.getAllErrors();
+			// for(ObjectError error:list) {
+			// System.out.println(error);
+			// }
 			model.addAllAttributes(result.getModel());
-			return "user/join"; 
+			return "user/join";
 		}
 		userService.join(vo);
 		return "redirect:/user/joinsuccess";
 	}
-	
 
 	/*
 	 * 회원가입 성공 폼
@@ -88,8 +87,13 @@ public class UserContoller {
 		authUser.setName(vo.getName());
 		return "/user/updatesuccess";
 	}
-//	@ExceptionHandler(Exception.class)
-//	public String handleException() {
-//		return "error/exception";
-//	}
+	
+	@RequestMapping(value = "/auth", method = RequestMethod.POST)
+	public void auth() {
+		
+	}
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public void lotout() {
+		
+	}
 }
