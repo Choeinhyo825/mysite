@@ -45,5 +45,6 @@ public class MysiteWebApplicationInitializer extends AbstractAnnotationConfigDis
 		dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
 		return dispatcherServlet;
 	}
+	//에러페이지도 추가
 
 }
