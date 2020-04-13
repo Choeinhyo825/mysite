@@ -29,5 +29,9 @@ public class UserRepository {
 	public int updateUser(UserVo vo) {
 		return sqlSession.insert("user.updateUser", vo);
 	}
+	
+	public UserVo find(String email) {
+		return sqlSession.selectOne("user.findByEmail", email);
+	}
 
 }
