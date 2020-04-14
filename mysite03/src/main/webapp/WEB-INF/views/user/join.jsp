@@ -13,6 +13,45 @@
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-3.4.1.js"></script>
 <script type="text/javascript">
 $(function(){
+	$('#join-form').submit(function(e) {
+		e.preventDefault();
+		
+		if($("#name").val() == ''){
+			alert('이름이 비어 있습니다.');
+			$("#name").focus();
+			return;
+		}
+		
+		if($("#email").val() == ''){
+			alert('이메일이 비어 있습니다.');
+			$("#email").focus();
+			return;
+		}
+		
+		if($("#img-checkemail").is(":hidden")) {
+			alert('이메일 중복 체크를 하지 않았습니다.');
+			return;
+		}
+		
+		if($("#password").val() == ''){
+			alert('비밀번호가 비어 있습니다.');
+			$("#password").focus();
+			return;
+		}		
+		if($("#agree-prov").is(":checked") == false){
+			alert('약관 동의가 필요합니다.');
+			$("#agree-prov").focus();
+			return;
+		}		
+	
+		this.submit();
+	});
+	
+	$('#email').change(function(){
+		$('#btn-checkemail').show();
+		$('#img-checkemail').hide();	
+	});
+	
 	$("#btn-checkemail").click(function(){
 		var email = $("#email").val();
 		if(email == ''){
@@ -25,7 +64,13 @@ $(function(){
 			data:'',
 			dataType: 'json',
 			success: function(response){
-				if(response.result == 'exist'){
+				console.log(response);
+				if(response.result == "fail"){
+					console.error(response.message);
+					return;
+				}
+				
+				if(response.data == true){
 					alert('존재하는 이메일입니다.');
 					$("#email")
 						.val('')
@@ -34,7 +79,7 @@ $(function(){
 				}
 				
 				$('#btn-checkemail').hide();
-				$('#img-checkemail').show();			
+				$('#img-checkemail').show();						
 			},
 			error: function(XHR, status, e){
 				console.error(status + ":" + e);
@@ -69,7 +114,7 @@ $(function(){
 					<form:input path="email"/>
 					<input type="button" id="btn-checkemail" value="이메일확인" >
 					<img id='img-checkemail' style='width:16px; display:none' src='${pageContext.request.contextPath }/assets/images/check.png' />
-					<p style="color: red;font-weight: bold; text-align: left; padding-left: 0;padding-top: 0">
+					<p style=" color: red;font-weight: bold; text-align: left; padding-left: 0;padding-top: 0">
 						<form:errors path="email"/>
 					</p>
 					
