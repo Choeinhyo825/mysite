@@ -18,6 +18,10 @@ public class GuestbookRepository {
 	public List<GuestbookVo> findAll() {
 		return sqlSession.selectList("guestbook.findAll");
 	}
+	
+	public List<GuestbookVo> findAll(Long startNo) {
+		return sqlSession.selectList( "guestbook.findAllByNo", startNo );
+	}
 
 	public int insert(GuestbookVo vo) {
 		return sqlSession.insert("guestbook.insert", vo);
@@ -25,10 +29,6 @@ public class GuestbookRepository {
 
 	public int delete(GuestbookVo vo) {
 		return sqlSession.delete("guestbook.delete", vo);
-	}
-
-	public List<GuestbookVo> findAllByNo(Long startNo) {
-		return sqlSession.selectList("guestbook.findAll");
 	}
 
 }

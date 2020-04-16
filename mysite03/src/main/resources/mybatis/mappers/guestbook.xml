@@ -11,7 +11,7 @@
 		]]>
 	</select>
 
-	<select id="findAllByNo" parameterType="long" resultType="guestbookvo">
+<select id="findAllByNo" parameterType="long" resultType="guestbookvo">
 		<![CDATA[			
 		  select no,
 		         name,
