@@ -27,4 +27,8 @@ public class GuestbookRepository {
 		return sqlSession.delete("guestbook.delete", vo);
 	}
 
+	public List<GuestbookVo> findAllByNo(Long startNo) {
+		return sqlSession.selectList("guestbook.findAll");
+	}
+
 }
