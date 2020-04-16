@@ -13,28 +13,23 @@ import com.douzone.mysite.vo.UserVo;
 public class GuestBookService {
 
 	@Autowired
-	private GuestbookRepository GuestbookRepository;
+	private GuestbookRepository guestbookRepository;
 
 	public List<GuestbookVo> getList() {
-		return GuestbookRepository.findAll();
+		return guestbookRepository.findAll();
 	}
 
 	public Boolean insertGuestBook(GuestbookVo vo) {
-		int count = GuestbookRepository.insert(vo);
-		return count == 1;
+		return 1 == guestbookRepository.insert(vo);
 	}
 
 	public Boolean delete(Long no, String pass) {
-		GuestbookVo vo = new GuestbookVo();
-		vo.setNo(no);
-		vo.setPass(pass);
-		int count = GuestbookRepository.delete(vo);
-		return count == 1;
+		return 1 == guestbookRepository.delete( new GuestbookVo(no, pass) );
 		
 	}
 
 	public List<GuestbookVo> getMessageList(Long startNo) {
-		return GuestbookRepository.findAll(startNo);
+		return guestbookRepository.findAll(startNo);
 	}
 
 

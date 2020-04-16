@@ -12,6 +12,26 @@
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-3.4.1.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
+/* jquery plugin */
+(function($){
+	$.fn.hello = function(){
+		console.log(this.length);
+		console.log("hello #" + this.attr('title'));
+	}
+})(jQuery);
+(function($){
+	$.fn.flash = function(){
+		var $that = $(this);
+		var isBlink = false;
+		setInterval(function(){
+			$that.css("backgroundColor",  isBlink ? "#f00" : "#aaa");
+			isBlink = !isBlink;
+		}, 1000);
+	}
+})(jQuery);
+</script>
+<script>
+/* guestbook spa application */
 var startNo = 0;
 var isEnd = false;
 var messageBox = function(title, message, callback){
@@ -88,14 +108,43 @@ $(function(){
 		modal: true,
 		buttons: {
 			"삭제": function(){
-				console.log("삭제!!!");
+				var no = $("#hidden-no").val();
+				var password = $("#password-delete").val();
+				
+				$.ajax({
+					url: '${pageContext.request.contextPath }/api/guestbook/delete/' + no,
+					async: true,
+					method: 'DELETE',
+					dataType: 'json',
+					data: 'password=' + password,
+					success: function(response){
+						if(response.result != "success"){
+							console.error(response.message);
+							return;
+						}
+						
+						if(response.data != -1){
+							$("#list-guestbook li[data-no=" + response.data + "]").remove();
+							dialogDelete.dialog('close');
+							return;
+						}
+						
+						// 비밀번호가 틀린경우
+						$("#dialog-delete-form p.validateTips.error").show();
+					},
+					error: function(xhr, status, e){
+						console.error(status + ":" + e);
+					}
+				});
 			},
 			"취소": function(){
 				$(this).dialog('close');
 			}
 		},
 		close: function(){
-			console.log("close");
+			$("#hidden-no").val("");
+			$("#password-delete").val("");
+			$("#dialog-delete-form p.validateTips.error").hide();
 		}
 	});
 	
@@ -114,13 +163,15 @@ $(function(){
 			});
 			return;	
 		}
-		vo.password = $("#input-password").val();
-		if(vo.password == ''){
+		
+		vo.pass = $("#input-password").val();
+		if(vo.pass == ''){
 			messageBox("방명록 글 남기기", "비밀번호는 필수 항목 입니다.", function(){
 				$("#input-password").focus();
 			});
 			return;	
 		}
+	
 		vo.contents = $("#tx-content").val();
 		if(vo.contents == ''){
 			messageBox("방명록 글 남기기", "내용은 필수 항목 입니다.", function(){
@@ -164,19 +215,23 @@ $(function(){
 			fetchList();
 		}
 	});
+	
 	// Live Event: 존재하지 않는 element의 이벤트 핸들러를 미리 세팅하는 것
 	// delegation(위임, document)
 	$(document).on('click', '#list-guestbook li a', function(event){
 		event.preventDefault();
 		
 		var no = $(this).data('no');
-		console.log("clicked:" + no);
-		
+		$("#hidden-no").val(no);		
 		dialogDelete.dialog("open");
 	});
 	
 	// 처음 리스트 가져오기
 	fetchList();
+	
+	// jquery plugin test
+	$(".btn-fetch").hello();
+	$(".btn-fetch").flash();
 });
 </script>
 </head>
@@ -194,29 +249,25 @@ $(function(){
 				</form>
 				
 				<div style='margin:20px 0 0 0'>
-					<button class='btn-fetch'>다음 가져오기</button>
+					<button class='btn-fetch' title="다음 가져오기">다음 가져오기</button>
 				</div>
 				
 				<ul id="list-guestbook">
 				</ul>
 				
 				<div style='margin:20px 0 0 0'>
-					<button class='btn-fetch'>다음 가져오기</button>
+					<button class='btn-fetch' title="다음 가져오기">다음 가져오기</button>
 				</div>
 				
 			</div>
 			<div id="dialog-delete-form" class="delete-form" title="메세지 삭제" style="display:none">
   				<p class="validateTips normal">작성시 입력했던 비밀번호를 입력하세요.</p>
-  				<p class="validateTips error" style="display:none">비밀번호가 틀립니다.</p>
+  				<p class="validateTips error" style="display:none;">비밀번호가 틀립니다.</p>
   				<form>
  					<input type="password" id="password-delete" value="" class="text ui-widget-content ui-corner-all">
 					<input type="hidden" id="hidden-no" value="">
-					<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
   				</form>
 			</div>
-			
-			
-			
 			<div id="dialog-message" title="" style="display:none">
   				<p></p>
 			</div>						
