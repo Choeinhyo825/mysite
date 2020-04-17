@@ -36,7 +36,7 @@ var messageBox = function(title, message, callback){
 			close: callback
 		});
 }
-var render = function(vo, mode){
+/* var render = function(vo, mode){
 	var html = 
 		"<li data-no='" + vo.no + "'>" + 
 		"   <strong>" + vo.name + "</strong>" + 
@@ -51,7 +51,7 @@ var render = function(vo, mode){
 		$("#list-guestbook").append(html);
 	}
 //	$("#list-guestbook")[mode ? "prepend" : "append"](html);
-}
+} */
 var fetchList = function(){
 	if(isEnd){
 		return;	
