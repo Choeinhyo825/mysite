@@ -11,29 +11,17 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-3.4.1.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script>
-/* jquery plugin */
-(function($){
-	$.fn.hello = function(){
-		console.log(this.length);
-		console.log("hello #" + this.attr('title'));
-	}
-})(jQuery);
-(function($){
-	$.fn.flash = function(){
-		var $that = $(this);
-		var isBlink = false;
-		setInterval(function(){
-			$that.css("backgroundColor",  isBlink ? "#f00" : "#aaa");
-			isBlink = !isBlink;
-		}, 1000);
-	}
-})(jQuery);
-</script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/ejs/ejs.js"></script>
 <script>
 /* guestbook spa application */
 var startNo = 0;
 var isEnd = false;
+var listItemTemplate = new EJS({
+	url: "${pageContext.request.contextPath }/assets/js/ejs/list-item-template.ejs"
+});
+var listTemplate = new EJS({
+	url: "${pageContext.request.contextPath }/assets/js/ejs/item-template.ejs"
+});
 var messageBox = function(title, message, callback){
 	$("#dialog-message p").text(message);
 	$("#dialog-message")
@@ -62,6 +50,7 @@ var render = function(vo, mode){
 	} else {
 		$("#list-guestbook").append(html);
 	}
+//	$("#list-guestbook")[mode ? "prepend" : "append"](html);
 }
 var fetchList = function(){
 	if(isEnd){
@@ -88,9 +77,11 @@ var fetchList = function(){
 			}
 			
 			// redering
-			$.each(response.data, function(index, vo){
-				render(vo);
-			}); 
+			// $.each(response.data, function(index, vo){
+			//	render(vo);
+			// });
+			var html = listTemplate.render(response);
+			$("#list-guestbook").append(html);
 			
 			startNo = $('#list-guestbook li').last().data('no') || 0;
 		},
@@ -194,7 +185,9 @@ $(function(){
 				}
 				
 				// rendering
-				render(response.data, true);
+				// render(response.data, true);
+				var html = listItemTemplate.render(response.data);
+				$("#list-guestbook").prepend(html);
 				
 				// form reset
 				$("#add-form")[0].reset();
@@ -233,6 +226,25 @@ $(function(){
 	$(".btn-fetch").hello();
 	$(".btn-fetch").flash();
 });
+</script>
+<script>
+/* jquery plugin */
+(function($){
+	$.fn.hello = function(){
+		console.log(this.length);
+		console.log("hello #" + this.attr('title'));
+	}
+})(jQuery);
+(function($){
+	$.fn.flash = function(){
+		var $that = $(this);
+		var isBlink = false;
+		setInterval(function(){
+			$that.css("backgroundColor",  isBlink ? "#f00" : "#aaa");
+			isBlink = !isBlink;
+		}, 1000);
+	}
+})(jQuery);
 </script>
 </head>
 <body>
